@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stop Googling Your Bugs — Let Code Studio Fix Them | Syncfusion</title>
+  <meta name="description" content="Live webinar: See how Syncfusion Code Studio pinpoints issues, explains root causes, and generates safe fixes—without endless searching. Live demo + Q&A." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="https://www.syncfusion.com/favicon.ico" />
+
+  <style>
+    :root{
+      --primary-700:#0B63E6;
+      --primary-600:#0E72EC;
+      --primary-500:#2B85F7;
+      --primary-100:#E8F1FF;
+
+      --text:#0F172A;
+      --text-2:#1F2937;
+      --muted:#475569;
+      --border:#E5E7EB;
+      --bg:#FFFFFF;
+      --bg-subtle:#F5F7FB;
+
+      --ok:#10B981;
+      --danger:#EF4444;
+
+      --radius-lg:14px;
+      --radius:12px;
+      --radius-sm:10px;
+
+      --shadow-sm:0 1px 2px rgba(0,0,0,.06);
+      --shadow-md:0 8px 20px rgba(2,6,23,.08);
+      --focus:0 0 0 3px rgba(14,114,236,.28);
+      --maxw:1140px;
+      --band-pad:48px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text-2);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;line-height:1.55}
+    img{max-width:100%;display:block}
+    a{color:var(--primary-600);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:var(--maxw);margin:0 auto;padding:20px}
+
+    /* Header */
+    header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--border);z-index:10}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .mark{width:28px;height:28px;border-radius:6px;background:
+      conic-gradient(from 45deg,#1F6FEB 0 25%, #FDB515 0 50%, #1F6FEB 0 75%, #111827 0 100%);
+      box-shadow:var(--shadow-sm)}
+    .brand h1{font-size:18px;margin:0;color:var(--text);font-weight:700}
+    .brand small{display:block;color:#64748B;font-weight:500;margin-top:2px;font-size:11px}
+
+    .links{display:flex;gap:22px;align-items:center}
+    .links a{color:#334155;font-weight:500}
+    .cta{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid transparent;cursor:pointer;text-decoration:none;font-weight:600}
+    .btn-outline{border-color:#C9D2E1;background:#fff;color:#0F172A}
+    .btn-outline:hover{background:#F8FAFF}
+    .btn-primary{background:var(--primary-600);color:#fff;box-shadow:var(--shadow-md)}
+    .btn-primary:hover{background:var(--primary-500)}
+    .btn-primary:focus-visible{outline:none;box-shadow:var(--focus)}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start;padding:28px 0}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;background:var(--primary-100);color:#0B63E6;border:1px solid #CFE0FF;font-weight:600;font-size:12px}
+    .title{font-size:clamp(28px,4.6vw,44px);line-height:1.1;margin:10px 0 8px;color:var(--text);font-weight:800;letter-spacing:-.01em}
+    .sub{color:#475569;max-width:70ch;margin:0 0 14px}
+
+    .badges{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#fff;color:#0F172A;font-size:13px}
+
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+
+    /* Card form */
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md)}
+    .form{padding:20px}
+    .form h3{margin:0 0 6px;color:var(--text);font-size:20px}
+    .form p{margin:0 0 12px;color:#64748B}
+    .field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+    label{font-size:13px;color:#334155;font-weight:600}
+    .input, select, textarea{padding:12px;border:1px solid #CBD5E1;border-radius:10px;background:#fff;color:#0F172A;outline:none}
+    .input:focus, select:focus, textarea:focus{border-color:var(--primary-600);box-shadow:var(--focus)}
+    .consent{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#334155}
+    .error{color:var(--danger);font-size:12px}
+    .success{color:var(--ok);font-size:14px;margin-top:8px}
+    .divider{height:1px;background:var(--border);margin:14px 0}
+
+    /* Countdown (hero) */
+    .count{display:flex;gap:12px;margin:16px 0}
+    .timebox{min-width:70px;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--border);background:#fff}
+    .timebox .num{font-weight:800;font-size:20px;color:#0F172A}
+    .timebox .lbl{font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:.4px}
+
+    /* Sections */
+    .section{padding:40px 0}
+    .section h2{margin:0 0 10px;color:#0F172A;font-size:26px;text-align:center}
+
+    /* Band wrapper (Trusted by) */
+    .band{width:100%;background:var(--bg-subtle);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    .band .container{padding-top:var(--band-pad);padding-bottom:var(--band-pad)}
+
+    /* Logos (SimpleIcons for reliability) */
+    .logos{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:center}
+    .logos img{height:28px;opacity:.95}
+    .logos img:hover{opacity:1}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border);background:#fff}
+    footer .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:20px 0;color:#64748B;font-size:14px}
+
+    @media (max-width: 1060px){
+      .hero{grid-template-columns:1fr}
+    }
+
+    /* ===== Post-form enhancements ===== */
+    .section.reveal { opacity: 0; transform: translateY(36px); transition: all .6s ease; }
+    .section.reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Agenda cards */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .agenda-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .agenda-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #D6DBE6; }
+    .agenda-icon { font-size: 20px; }
+    .agenda-title { margin: 6px 0 4px; font-weight: 800; color: var(--text); }
+    .agenda-desc { margin: 0; color: #64748B; font-size: 14px }
+
+    /* Speaker card */
+    .speaker-card {
+      display: grid; grid-template-columns: 96px 1fr; gap: 18px;
+      background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 18px; align-items: center; box-shadow: var(--shadow-sm);
+      max-width: 820px; margin: 0 auto;
+    }
+    .speaker-photo {
+      width: 96px; height: 96px; border-radius: 12px; object-fit: cover; border: 1px solid var(--border);
+      background:#F1F5FF;
+    }
+    .speaker-name { margin: 0; font-size: 18px; font-weight: 800; color: var(--text); }
+    .speaker-role { margin: 2px 0 6px; color: #64748B; font-size: 14px }
+    .speaker-quote { margin: 0; color: #334155; }
+    .speaker-socials { display: flex; gap: 10px; margin-top: 10px }
+    .speaker-socials a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 8px; }
+    .speaker-socials a:hover { background: #F8FAFF; border-color: #CFE0FF; }
+
+    /* Testimonials slider */
+    .t-wrap { position: relative; }
+    .t-slider {
+      display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 2px 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .t-card {
+      flex: 0 0 340px; scroll-snap-align: start;
+      background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px; box-shadow: var(--shadow-sm);
+    }
+    .t-quote { margin: 0; color: #0F172A }
+    .t-meta { margin-top: 8px; color: #64748B; font-size: 13px }
+    .t-quote::before { content: "“"; color: var(--primary-600); font-size: 18px; margin-right: 2px }
+    .t-quote::after  { content: "”"; color: var(--primary-600); font-size: 18px; margin-left: 2px }
+
+    /* FAQ accordion */
+    .faq-list { display: grid; gap: 10px; max-width: 900px; margin: 0 auto }
+    .faq-list details {
+      background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow-sm); padding: 10px 12px;
+    }
+    .faq-list summary {
+      cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--text);
+    }
+    .faq-list summary::-webkit-details-marker { display: none }
+    .faq-icon { font-size: 16px; color: var(--primary-600) }
+    .faq-answer { color: #475569; margin: 8px 0 0 }
+    .faq-list details[open] { border-color: #D6DBE6; }
+
+    /* Final CTA */
+    .final-cta {
+      background: var(--primary-100);
+      border-top: 1px solid #CFE0FF; border-bottom: 1px solid #CFE0FF;
+    }
+    .final-cta .cta-inner {
+      display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px;
+      padding: 22px; border-radius: var(--radius-lg); max-width: 980px; margin: 0 auto;
+    }
+    .final-cta h3 { margin: 0; color: var(--text); font-size: 22px; text-align:left }
+    .final-cta p { margin: 4px 0 0; color: #334155; text-align:left }
+    .mini-count { display: inline-flex; gap: 10px; align-items: center; margin-left: 8px; flex-wrap: wrap }
+    .mini-count .box {
+      min-width: 58px; text-align: center; padding: 6px 8px; border-radius: 10px;
+      background: #fff; border: 1px solid #DCE7FF;
+    }
+    .mini-count .num { font-weight: 800; color: #0F172A }
+    .mini-count .lbl { font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: .4px }
+
+    @media (max-width: 840px){
+      .final-cta .cta-inner { grid-template-columns: 1fr; text-align:center }
+      .final-cta h3, .final-cta p { text-align:center }
+    }
+  </style>
+
+  <!-- Schema.org Event JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Stop Googling Your Bugs — Let Code Studio Fix Them",
+    "startDate": "2025-11-14T14:00:00Z",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": { "@type": "VirtualLocation", "url": "https://demio.com/room/your-room-id" },
+    "image": ["https://www.syncfusion.com/-/media/syncfusion/images/og/syncfusion-og.jpg"],
+    "description": "Live webinar by Syncfusion Code Studio. Learn how Code Studio helps you diagnose and fix bugs fast, with live demo and Q&A.",
+    "organizer": { "@type": "Organization", "name": "Syncfusion", "url": "https://www.syncfusion.com/" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+    "performer": [{ "@type": "Person", "name": "Nijamudeen M", "jobTitle": "Senior Product Manager" }]
+  }
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Code Studio</h1>
+          <small>by Syncfusion</small>
+        </div>
+      </div>
+      <div class="links" aria-label="Primary">
+        <a href="https://www.syncfusion.com/code-studio" target="_blank" rel="noopener">Product</a>
+        <a href="https://www.syncfusion.com/resources/technical" target="_blank" rel="noopener">Resources</a>
+        <a href="https://www.syncfusion.com/sales/products" target="_blank" rel="noopener">Pricing</a>
+        <a href="https://www.syncfusion.com/company/about-us" target="_blank" rel="noopener">About</a>
+      </div>
+      <div class="cta">
+        <a class="btn btn-outline" href="https://www.syncfusion.com/company/contact/request-demo" target="_blank" rel="noopener">Request Demo</a>
+        <a class="btn btn-primary" href="https://www.syncfusion.com/downloads" target="_blank" rel="noopener">Try It Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Live Webinar • Free • Limited Seats</span>
+        <h2 class="title">Stop Googling Your Bugs — Let Code Studio Fix Them</h2>
+        <p class="sub">
+          Watch how Syncfusion Code Studio pinpoints issues, explains root causes, and generates safe fixes with tests—so your teams ship faster without the search spiral.
+        </p>
+
+        <div class="badges" role="list" aria-label="Key details">
+          <div class="badge" role="listitem">Date: <strong id="dateText">Nov 14</strong></div>
+          <div class="badge" role="listitem">Time: <strong>7:30 PM IST</strong> • <span id="localTz">shows your local time</span></div>
+          <div class="badge" role="listitem">Platform: <strong>Demio</strong></div>
+          <div class="badge" role="listitem">Includes: Recording + Slides</div>
+        </div>
+
+        <div class="count" aria-live="polite" aria-label="Countdown to start">
+          <div class="timebox"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
+          <div class="timebox"><div class="num" id="cd-hours">--</div><div class="lbl">Hours</div></div>
+          <div class="timebox"><div class="num" id="cd-mins">--</div><div class="lbl">Mins</div></div>
+          <div class="timebox"><div class="num" id="cd-secs">--</div><div class="lbl">Secs</div></div>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#agenda">See what you’ll learn</a>
+          <a class="btn btn-outline" href="#register">Reserve my seat</a>
+        </div>
+      </div>
+
+      <!-- Registration card -->
+      <aside id="register" class="card" aria-label="Registration form">
+        <form class="form" id="regForm" novalidate>
+          <h3>Reserve your seat</h3>
+          <p>Join live or get the recording via email.</p>
+
+          <div class="field">
+            <label for="name">Full name</label>
+            <input class="input" id="name" name="name" type="text" placeholder="Jane Doe" autocomplete="name" required />
+            <div class="error" id="err-name"></div>
+          </div>
+
+          <div class="field">
+            <label for="email">Work email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="jane@company.com" autocomplete="email" required />
+            <div class="error" id="err-email"></div>
+          </div>
+
+          <div class="field">
+            <label for="company">Company (optional)</label>
+            <input class="input" id="company" name="company" type="text" placeholder="Acme Inc." autocomplete="organization" />
+          </div>
+
+          <div class="field">
+            <label for="role">Role (optional)</label>
+            <select id="role" name="role">
+              <option value="">Select your role</option>
+              <option>Founder/Executive</option>
+              <option>Engineering</option>
+              <option>Product</option>
+              <option>DevOps</option>
+              <option>QA</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <!-- Honeypot -->
+          <div class="field" style="position:absolute;left:-9999px" aria-hidden="true">
+            <label for="hp">Leave this empty</label>
+            <input id="hp" name="hp" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <div class="consent">
+              <input id="consent" name="consent" type="checkbox" required aria-describedby="consentHelp" />
+              <label for="consent">I agree to the terms and privacy policy.</label>
+            </div>
+            <div id="consentHelp" class="help">We’ll send reminders and the recording.</div>
+            <div class="error" id="err-consent"></div>
+          </div>
+
+          <button class="btn btn-primary" type="submit" aria-label="Submit registration">Reserve my seat</button>
+          <div class="divider"></div>
+          <div style="font-size:12px;color:#64748B">Secure form • Your info is protected</div>
+          <div class="success" id="successMsg" role="status" style="display:none">Thanks! Your seat is reserved. Check your email for confirmation.</div>
+        </form>
+      </aside>
+    </section>
+  </main>
+
+  <!-- What you'll learn (moved above Trusted by) -->
+  <main class="container">
+    <section id="agenda" class="section reveal">
+      <h2>What you’ll learn</h2>
+      <div class="agenda-grid">
+        <article class="agenda-card">
+          <div class="agenda-icon">🧠</div>
+          <h3 class="agenda-title">AI‑assisted diagnostics</h3>
+          <p class="agenda-desc">Identify root causes instantly with context-aware analysis and logs.</p>
+        </article>
+        <article class="agenda-card">
+          <div class="agenda-icon">⚙️</div>
+          <h3 class="agenda-title">Safe fix generation</h3>
+          <p class="agenda-desc">Auto‑create fixes with tests and guardrails—ready for your repo.</p>
+        </article>
+        <article class="agenda-card">
+          <div class="agenda-icon">🚀</div>
+          <h3 class="agenda-title">From fail to PR</h3>
+          <p class="agenda-desc">Live demo: take a failing test to a merged PR end‑to‑end.</p>
+        </article>
+        <article class="agenda-card">
+          <div class="agenda-icon">🧩</div>
+          <h3 class="agenda-title">CI/CD checklist</h3>
+          <p class="agenda-desc">Drop‑in templates to plug Code Studio into your pipelines in a day.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Trusted logos with title -->
+  <div class="band">
+    <div class="container">
+      <h2>Trusted by</h2>
+      <div class="logos" aria-label="Trusted by">
+        <img src="https://cdn.simpleicons.org/microsoft/334155" alt="Microsoft">
+        <img src="https://cdn.simpleicons.org/ibm/334155" alt="IBM">
+        <img src="https://cdn.simpleicons.org/amazonaws/334155" alt="Amazon Web Services">
+        <img src="https://cdn.simpleicons.org/googlecloud/334155" alt="Google Cloud">
+        <img src="https://cdn.simpleicons.org/github/334155" alt="GitHub">
+        <img src="https://cdn.simpleicons.org/jetbrains/334155" alt="JetBrains">
+      </div>
+    </div>
+  </div>
+
+  <!-- Post-form improved sections (continue) -->
+  <main class="container">
+    <!-- Speaker -->
+    <section class="section reveal">
+      <h2>Meet your speaker</h2>
+      <div class="speaker-card">
+        <img class="speaker-photo" src="https://www.syncfusion.com/-/media/syncfusion/images/og/syncfusion-og.jpg" alt="Speaker photo (placeholder)">
+        <div>
+          <h3 class="speaker-name">Nijamudeen M</h3>
+          <div class="speaker-role">Senior Product Manager, Syncfusion Code Studio</div>
+          <p class="speaker-quote">“Developers shouldn’t fight their tools. Let’s make debugging predictable, fast, and reliable.”</p>
+          <div class="speaker-socials" aria-label="Speaker social profiles">
+            <a href="https://www.linkedin.com/company/syncfusion/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM0 8h5v16H0zM8 8h4.8v2.2h.07c.67-1.2 2.3-2.46 4.73-2.46 5.06 0 6 3.33 6 7.66V24h-5V16.2c0-1.86-.03-4.26-2.6-4.26-2.6 0-3 2.03-3 4.12V24H8z"/></svg>
+            </a>
+            <a href="https://x.com/syncfusion" target="_blank" rel="noopener" aria-label="X (Twitter)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#111827" aria-hidden="true"><path d="M18.244 2H21l-6.51 7.44L22 22h-6.93l-4.8-6.07L4.7 22H2l7.04-8.05L2 2h6.93l4.51 5.7L18.244 2Zm-2.43 18h1.96L8.29 4H6.33l9.48 16Z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section reveal">
+      <h2>What past attendees say</h2>
+      <div class="t-wrap">
+        <div class="t-slider" aria-label="Testimonials">
+          <div class="t-card">
+            <p class="t-quote">Clear, practical workflows. The demo mirrored our stack and saved us days.</p>
+            <div class="t-meta">Engineering Manager</div>
+          </div>
+          <div class="t-card">
+            <p class="t-quote">We cut bug triage time by half after adopting the checklist.</p>
+            <div class="t-meta">Tech Lead</div>
+          </div>
+          <div class="t-card">
+            <p class="t-quote">Best debugging session I’ve attended—no fluff, just answers.</p>
+            <div class="t-meta">Senior Developer</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="section reveal">
+      <h2>FAQs</h2>
+      <div class="faq-list">
+        <details>
+          <summary><span class="faq-icon">❓</span> What time is the webinar?</summary>
+          <p class="faq-answer">Nov 14 at 7:30 PM IST. This page also shows your local time automatically.</p>
+        </details>
+        <details>
+          <summary><span class="faq-icon">🎥</span> Will there be a recording?</summary>
+          <p class="faq-answer">Yes—registrants get the recording and slides within 24 hours.</p>
+        </details>
+        <details>
+          <summary><span class="faq-icon">🔗</span> How do I join?</summary>
+          <p class="faq-answer">After registering, you’ll receive a unique Demio link via email.</p>
+        </details>
+        <details>
+          <summary><span class="faq-icon">💳</span> Is it free?</summary>
+          <p class="faq-answer">Yes. No credit card required.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta section reveal">
+      <div class="card cta-inner">
+        <div>
+          <h3>Ready to stop Googling your bugs?</h3>
+          <p>Save your seat now and get the recording + slides after the session.</p>
+        </div>
+        <div>
+          <div class="mini-count" aria-label="Time until webinar">
+            <div class="box"><div class="num" id="mcd-d">--</div><div class="lbl">Days</div></div>
+            <div class="box"><div class="num" id="mcd-h">--</div><div class="lbl">Hours</div></div>
+            <div class="box"><div class="num" id="mcd-m">--</div><div class="lbl">Mins</div></div>
+          </div>
+          <div style="margin-top:10px;text-align:right">
+            <a class="btn btn-primary" href="#register">Reserve my seat</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container inner">
+      <div>© <span id="year"></span> Syncfusion. All rights reserved.</div>
+      <div style="display:flex;gap:16px">
+        <a href="https://www.syncfusion.com/privacy" target="_blank" rel="noopener">Privacy</a>
+        <a href="https://www.syncfusion.com/terms-of-use" target="_blank" rel="noopener">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Event time: Nov 14, 7:30 PM IST => 2025-11-14T14:00:00Z
+    const EVENT_ISO_UTC = "2025-11-14T14:00:00Z";
+
+    const dateText = document.getElementById('dateText');
+    const localTzEl = document.getElementById('localTz');
+    const dt = new Date(EVENT_ISO_UTC);
+
+    // Date (readable)
+    const fmtDate = new Intl.DateTimeFormat(undefined, { weekday:'short', month:'short', day:'numeric', year:'numeric' }).format(dt);
+    dateText.textContent = fmtDate;
+
+    // Local time display
+    const localTzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const localFmt = new Intl.DateTimeFormat(undefined, { hour:'2-digit', minute:'2-digit', timeZoneName:'short' }).format(dt);
+    localTzEl.textContent = `Local: ${localFmt} (${localTzName})`;
+
+    // Main countdown (hero)
+    const el = { d: document.getElementById('cd-days'), h: document.getElementById('cd-hours'), m: document.getElementById('cd-mins'), s: document.getElementById('cd-secs') };
+    function tick(){
+      const now = Date.now();
+      const target = new Date(EVENT_ISO_UTC).getTime();
+      let diff = Math.max(0, target - now);
+      const d = Math.floor(diff / 86400000); diff -= d*86400000;
+      const h = Math.floor(diff / 3600000);  diff -= h*3600000;
+      const m = Math.floor(diff / 60000);    diff -= m*60000;
+      const s = Math.floor(diff / 1000);
+      el.d.textContent = String(d);
+      el.h.textContent = String(h).padStart(2,'0');
+      el.m.textContent = String(m).padStart(2,'0');
+      el.s.textContent = String(s).padStart(2,'0');
+    }
+    tick(); setInterval(tick,1000);
+
+    // Form validation + mock submit
+    const form = document.getElementById('regForm');
+    const successMsg = document.getElementById('successMsg');
+    const err = {
+      name: document.getElementById('err-name'),
+      email: document.getElementById('err-email'),
+      consent: document.getElementById('err-consent')
+    };
+    function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.name.textContent = '';
+      err.email.textContent = '';
+      if (err.consent) err.consent.textContent = '';
+      successMsg.style.display = 'none';
+
+      const data = Object.fromEntries(new FormData(form));
+      let ok = true;
+      if (!data.name || data.name.trim().length < 2){ err.name.textContent = 'Please enter your full name.'; ok = false; }
+      if (!data.email || !validateEmail(data.email)){ err.email.textContent = 'Enter a valid email address.'; ok = false; }
+      if (!form.consent.checked){ if (err.consent) err.consent.textContent = 'Please agree to continue.'; ok = false; }
+      if (data.hp) return; // honeypot trip
+      if (!ok) return;
+
+      // TODO: Wire to your backend or Demio Registration API.
+      // Example POST:
+      /*
+      await fetch('https://your-endpoint.example/registrations', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          ...data,
+          eventId: 'code-studio-webinar-2025-11-14',
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          source: 'landing-page'
+        })
+      });
+      */
+
+      form.reset();
+      successMsg.style.display = 'block';
+      window.dispatchEvent(new CustomEvent('registration:success', { detail: { email: data.email }}));
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll reveal for sections
+    const revealEls = document.querySelectorAll('.section.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Mini countdown (final CTA)
+    (function miniCountdown(){
+      const d = document.getElementById('mcd-d');
+      const h = document.getElementById('mcd-h');
+      const m = document.getElementById('mcd-m');
+      if (!d || !h || !m) return;
+      function tickMini() {
+        const now = Date.now();
+        const target = new Date(EVENT_ISO_UTC).getTime();
+        let diff = Math.max(0, target - now);
+        const days = Math.floor(diff / 86400000); diff -= days*86400000;
+        const hours = Math.floor(diff / 3600000);  diff -= hours*3600000;
+        const mins = Math.floor(diff / 60000);
+        d.textContent = String(days);
+        h.textContent = String(hours).padStart(2,'0');
+        m.textContent = String(mins).padStart(2,'0');
+      }
+      tickMini(); setInterval(tickMini, 15000);
+    })();
+  </script>
+</body>
+</html>
